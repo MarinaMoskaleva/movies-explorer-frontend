@@ -1,0 +1,39 @@
+.filter-checkbox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    margin: 28px auto 40px;
+}
+
+.filter-checkbox_input{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+.visible-checkbox{
+    display: inline-block;
+    vertical-align: middle;
+    height: 20px;
+    width: 36px;
+    border-radius: 20px;
+    background-image: url('../../../../images/chb.png');
+    background-size: cover;
+    transform: rotate(180deg);
+}
+
+.filter-checkbox_input:checked + .visible-checkbox {
+    transform: rotate(0deg);
+}
+
+.filter-checkbox_text{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #000000;
+    margin-left: 12px;
+}

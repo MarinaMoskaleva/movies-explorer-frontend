@@ -1,0 +1,86 @@
+.about-me{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding: 110px 70px;
+    width: calc(100% - 140px);
+}
+
+.about-me__info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1140px;
+    margin-top: 58px;
+}
+
+.about-me__img{
+    background-image: url('../../../images/photo.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    width: 270px;
+    height: 327px;
+}
+
+.about-me__text{
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    justify-content: flex-start;
+}
+
+.about-me__name{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 58px;
+    letter-spacing: -0.04em;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 18px;
+}
+
+.about-me__about{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 20px;
+    color: #000000;
+    mix-blend-mode: normal;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 26px;
+}
+
+.about-me__desc{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #000000;
+    mix-blend-mode: normal;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 90px;
+}
+
+.about-me__links{
+    display: flex;
+    flex-direction: row;
+}
+
+.about-me__link{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+    text-decoration: none;
+    margin-right: 20px;
+}

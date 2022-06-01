@@ -1,0 +1,14 @@
+.not-found{
+    display: flex;
+    flex-direction: column;
+    margin: 50px;
+}
+.not-found__text{
+    padding: 0;
+    margin: 0;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #000;
+}

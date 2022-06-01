@@ -1,0 +1,22 @@
+.navigation{
+    display: flex;
+    flex-direction: row;
+}
+
+.navigation__link{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: right;
+    color: #000000;
+    text-decoration: none;
+    margin-right: 16px;
+}
+.navigation__link:last-child{
+    margin-right: 0;
+}
+
+.navigation__link_active{
+    font-weight: 500;
+}
