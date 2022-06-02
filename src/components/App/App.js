@@ -11,7 +11,6 @@ import { moviesData, savedMoviesData } from '../../utils/initialData'
 // import Navigation from '../Navigation/Navigation';
 
 function App() {
-  console.log(moviesData);
   return (
     <div className='root'>
         <Switch>

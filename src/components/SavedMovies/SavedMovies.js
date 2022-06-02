@@ -7,7 +7,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 function SavedMovies({movies, isOpenSavedMovies}) {
 
     return (
-        <div className='movies'>
+        <div className='saved-movies'>
             <Header isActive={true}/>
             <MoviesCardList movies={movies} isOpenSavedMovies={isOpenSavedMovies}/>
             <Footer />

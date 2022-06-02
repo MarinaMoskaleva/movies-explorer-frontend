@@ -1,0 +1,122 @@
+.login{
+    width: 396px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 0 auto;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 70px 0;
+}
+.login__form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #A0A0A0;
+    flex-grow: 1;
+}
+.login__form-top{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login__form-bottom{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login__greeting{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    color: #000000;
+    margin: 40px 0;
+    padding: 0;
+}
+.login__form-field{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 20px;
+}
+.login__input{
+    background: #F9F9F9;
+    border-radius: 8px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000000;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+.login__error-validation{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #FF4062;
+    visibility: hidden;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+}
+.login__button{
+    width: 396px;
+    height: 45px;
+    background: #000000;
+    border-radius: 3px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #FFFFFF;
+    border: none;
+}
+.login__caption{
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
+    align-self: center;
+}
+.login__caption-text{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #A0A0A0;
+    padding: 0;
+    margin: 0 6px 0 0;
+}
+.login__caption-link{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+    text-decoration: none;
+}
+.login__error{
+    visibility: hidden;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #FF004C;
+    margin-bottom: 20px;
+}
+.login__error_show{
+    visibility: visible;
+}
