@@ -2,9 +2,8 @@ import React from 'react';
 import './AboutProject.css';
 import MainLine from '../MainLine/MainLine';
 
-function AboutProject() {
-    return (
-        <div className="about-project">
+const AboutProject = React.forwardRef((props, ref) => (
+    <div className="about-project"  ref={ref}>
             <MainLine text='О проекте' />
             <div className="about-project__info">
                 <div className="about-project__text">
@@ -16,18 +15,17 @@ function AboutProject() {
                     <p className="about-project__text-paragraph">У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было соблюдать, чтобы успешно защититься.</p>
                 </div>
             </div>
-            <div className="about-project__scale">
+            <div className="about-project__scale" >
                 <div className="about-project__scale-back">
-                    <div className="about-project__black-ceil">1 неделя</div>
+                    <div className="about-project__ceil">1 неделя</div>
                     <p className="about-project__caption">Back-end</p>
                 </div>
                 <div className="about-project__scale-front">
-                    <div className="about-project__gray-ceil">4 неделя</div>
+                    <div className="about-project__ceil about-project__ceil_gray">4 неделя</div>
                     <p className="about-project__caption">Front-end</p>
                 </div>
             </div>
         </div>
-    );
-}
+  ));
 
 export default AboutProject;

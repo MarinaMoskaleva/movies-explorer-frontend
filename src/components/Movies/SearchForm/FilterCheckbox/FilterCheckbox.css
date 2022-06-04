@@ -36,3 +36,13 @@
     color: #000000;
     margin-left: 12px;
 }
+@media screen and (max-width: 1023px){
+    .filter-checkbox {
+        margin-top: 40px;
+    }
+}
+@media screen and (max-width: 767px){
+    .filter-checkbox {
+        margin: 46px auto 39px;
+    }
+}

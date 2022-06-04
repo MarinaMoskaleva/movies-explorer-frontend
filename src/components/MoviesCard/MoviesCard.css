@@ -1,7 +1,5 @@
 .card{
     display: flex;
-    width: 360px;
-    height: 319px;
     flex-direction: column;
     background: #FDFDFD;
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
@@ -32,6 +30,10 @@
     margin: 0;
     padding: 0;
 }
+.card__img{
+    width: 100%;
+    height: auto;
+}
 .card__button{
     width: 100px;
     height: 29px;
@@ -56,7 +58,9 @@
     background-position: center;
     background-repeat: no-repeat;
 }
-
+.card__button:hover{
+    opacity: 0.8;
+}
 .card__button_saved::before{
     content: '';
 }

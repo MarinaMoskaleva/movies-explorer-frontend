@@ -1,11 +1,8 @@
 import React from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-// import imgMovie from '../../images/movie.png';
-
 
 function MoviesCardList({movies, isOpenSavedMovies=false}) {
-    console.log("isOpenSavedMovies", isOpenSavedMovies);
     return (
         <div className="card-list">
             {movies.map((item) => (

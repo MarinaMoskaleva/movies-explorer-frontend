@@ -1,7 +1,10 @@
 import React from 'react';
 import './Promo.css';
 
-function Promo() {
+function Promo({handleClick}) {
+  function handleButtonClick() {
+    handleClick();
+  }
     return (
         <div className="promo">
             <div className="promo__info">
@@ -11,7 +14,7 @@ function Promo() {
                 </div>
                 <div className="promo__logo"></div>
             </div>
-            <button className="promo__button">Узнать больше</button>
+            <button className="promo__button" onClick={handleButtonClick}>Узнать больше</button>
         </div>
     );
 }

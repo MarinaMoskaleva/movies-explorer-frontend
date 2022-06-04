@@ -5,6 +5,8 @@
     align-items: center;
     background-color: #fff;
     margin: 110px 70px;
+    width: calc(100% - 140px);
+    max-width: 1140px;
 }
 .about-project__info{
     display: flex;
@@ -63,7 +65,7 @@
     width: calc((100% / 5)*4);
 }
 
-.about-project__black-ceil{
+.about-project__ceil{
     background-color: #000000;
     color: #fff;
     height: 36px;
@@ -75,9 +77,12 @@
     justify-content: center;
     align-items: center;
 }
+.about-project__ceil_gray{
+    color: #000000;
+    background-color: #F2F2F2;
+}
 
 .about-project__caption{
-    font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -86,15 +91,69 @@
     color: #A0A0A0;
 }
 
-.about-project__gray-ceil{
-    color: #000000;
-    background-color: #F2F2F2;
-    height: 36px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+@media screen and (max-width: 1279px){
+    .about-project {
+        width: calc(100% - 100px);
+    }
+}
+@media screen and (max-width: 1023px){
+    .about-project{
+        margin: 90px 50px;
+    }
+    .about-project__info{
+        margin-bottom: 93px;
+    }
+    .about-project__text-paragraph{
+        line-height: 18px;
+    }
+    .about-project__text{
+        margin-right: 30px;
+        max-width: 319px;
+    }
+    .about-project__caption{
+        font-weight: 400;
+    }
+}
+@media screen and (max-width: 767px){
+    .about-project {
+        width: calc(100% - 36px);
+        margin: 70px 18px;
+    }
+    .about-project__info{
+        flex-direction: column;
+        align-self: flex-start;
+        margin: 60px auto;
+    }
+    .about-project__text{
+        margin-right: 0;
+        margin-bottom: 56px;
+    }
+    .about-project__text:last-of-type{
+        margin-bottom: 0;
+    }
+    .about-project__text-title{
+        font-size: 18px;
+        line-height: 22px;
+        margin-bottom: 16px;
+    }
+    .about-project__text-paragraph{
+        font-size: 11px;
+        line-height: 16px;
+    }
+    .about-project__scale-back{
+        width: 28.4%;
+    }
+    
+    .about-project__scale-front{
+        width: 71.6%;
+    }
+    .about-project__ceil{
+        height: 35px;
+        font-size: 11px;
+        line-height: 13px;
+    }
+    .about-project__caption{
+        font-size: 11px;
+        line-height: 13px;
+    }
 }

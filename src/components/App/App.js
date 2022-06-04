@@ -8,6 +8,7 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import { moviesData, savedMoviesData } from '../../utils/initialData'
+import Error from '../Error/Error';
 // import Navigation from '../Navigation/Navigation';
 
 function App() {
@@ -27,11 +28,13 @@ function App() {
             <Main />
           </Route>
           <Route path="/movies" >
-          {/* <Navigation /> */}
             <Movies movies={moviesData}/>
           </Route>
           <Route path="/saved-movies">
             <SavedMovies movies={savedMoviesData} isOpenSavedMovies={true}/>
+          </Route>
+          <Route path="/err">
+            <Error />
           </Route>
         </Switch>
     </div>

@@ -1,13 +1,17 @@
 .login{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.login__container{
     width: 396px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    margin: 0 auto;
-    min-height: 100vh;
-    box-sizing: border-box;
-    padding: 70px 0;
 }
 .login__form{
     display: flex;
@@ -19,18 +23,8 @@
     font-size: 10px;
     line-height: 12px;
     color: #A0A0A0;
-    flex-grow: 1;
 }
-.login__form-top{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-.login__form-bottom{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
+
 .login__greeting{
     font-style: normal;
     font-weight: 500;
@@ -72,8 +66,11 @@
     top: calc(100% + 5px);
     left: 0;
 }
+.login__error-validation_show{
+    visibility: visible;
+}
 .login__button{
-    width: 396px;
+    width: 100%;
     height: 45px;
     background: #000000;
     border-radius: 3px;
@@ -84,6 +81,15 @@
     text-align: center;
     color: #FFFFFF;
     border: none;
+}
+.login__button:hover{
+    opacity: 0.8;
+}
+.login__button_disabled{
+    background: #F8F8F8;
+    color:#C2C2C2;
+    pointer-events: none;
+    user-select: none;
 }
 .login__caption{
     display: flex;
@@ -108,6 +114,9 @@
     color: #000000;
     text-decoration: none;
 }
+.login__caption-link:hover{
+    opacity: 0.7;
+}
 .login__error{
     visibility: hidden;
     font-style: normal;
@@ -116,7 +125,27 @@
     line-height: 13px;
     color: #FF004C;
     margin-bottom: 20px;
+    margin-top: 124px;
 }
 .login__error_show{
     visibility: visible;
+}
+@media screen and (max-width: 767px){
+    .login__container{
+        width: 260px;
+        align-items: center;
+    }
+    .login__greeting{
+        margin: 50px 0 80px;
+    }
+    .login__caption-text{
+        font-size: 12px;
+        line-height: 15px;
+        margin: 0 7px 0 0;
+    }
+    .login__caption-link{
+        font-size: 12px;
+        line-height: 15px;
+        margin: 0 7px 0 0;
+    }
 }

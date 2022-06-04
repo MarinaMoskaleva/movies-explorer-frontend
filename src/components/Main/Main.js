@@ -8,11 +8,15 @@ import Footer from "../Footer/Footer";
 import Portfolio from "./Portfolio/Portfolio";
 
 function Main() {
-
+    const myRef = React.createRef();
+  
+  function handleClick() {
+      myRef.current.scrollIntoView();
+  }
     return (
         <div className='main'>
-            <PinkColor />
-            <AboutProject />
+            <PinkColor handleClick={handleClick}/>
+            <AboutProject ref={myRef}/>
             <Techs />
             <AboutMe />
             <Portfolio />

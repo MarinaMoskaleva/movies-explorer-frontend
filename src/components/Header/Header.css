@@ -5,18 +5,10 @@
     align-items: center;
     margin: 0 auto;
     padding: 18px 0;
-    max-width: 1280px;
+    max-width: 1140px;
     width: calc(100% - 140px);
     box-sizing: border-box;
     position: relative;
-}
-
-.header__logo {
-    display: block;
-    background-image: url(../../images/logo.svg);
-    background-size: cover;
-    width: 38px;
-    height: 38px;
 }
 
 .header__text {
@@ -25,6 +17,10 @@
     font-size: 12px;
     line-height: 16px;
     color: #000000;
+    text-decoration: none;
+}
+.header__text:hover{
+    opacity: 0.7;
 }
 
 .header__button-signin {
@@ -41,6 +37,9 @@
     width: 76px;
     height: 32px;
     margin-left: 30px;
+}
+.header__button-signin:hover{
+    opacity: 0.8;
 }
 
 .header__link-profile {
@@ -76,4 +75,29 @@
 
 .header__inter_hide{
     display: none;
+}
+
+@media screen and (max-width: 1279px){
+    .header {
+        width: calc(100% - 100px);
+    }
+}
+@media screen and (max-width: 1023px){
+    .header {
+        width: calc(100% - 60px);
+    }
+}
+@media screen and (max-width: 767px){
+    .header {
+        width: calc(100% - 28px);
+    }
+    .header__text {
+        font-size: 10px;
+    }
+    .header__button-signin {
+        font-size: 10px;
+        width: 54px;
+        height: 26px;
+        margin-left: 14px;
+    }
 }

@@ -3,11 +3,11 @@ import './PinkColor.css';
 import Header from '../../Header/Header';
 import Promo from '../Promo/Promo';
 
-function PinkColor() {
+function PinkColor({handleClick}) {
     return (
         <div className="pink-color">
             <Header isActive={false}/>
-            <Promo />
+            <Promo handleClick={handleClick}/>
         </div>
     );
 }

@@ -1,10 +1,17 @@
 .register{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.register__container{
     width: 396px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    margin: 70px auto;
 }
 .register__form{
     display: flex;
@@ -44,7 +51,7 @@
     border: none;
     padding: 15px;
     width: 100%;
-    margin: 10px 0;
+    margin: 10px 0 0;
     box-sizing: border-box;
 }
 .register__error-validation{
@@ -58,8 +65,11 @@
     top: calc(100% + 5px);
     left: 0;
 }
+.register__error-validation_show{
+    visibility: visible;
+}
 .register__button{
-    width: 396px;
+    width: 100%;
     height: 45px;
     background: #000000;
     border-radius: 3px;
@@ -70,6 +80,15 @@
     text-align: center;
     color: #FFFFFF;
     border: none;
+}
+.register__button:hover{
+    opacity: 0.8;
+}
+.register__button_disabled{
+    background: #F8F8F8;
+    color:#C2C2C2;
+    pointer-events: none;
+    user-select: none;
 }
 .register__caption{
     display: flex;
@@ -94,6 +113,9 @@
     color: #000000;
     text-decoration: none;
 }
+.register__caption-link:hover{
+    opacity: 0.7;
+}
 .register__error{
     visibility: hidden;
     font-style: normal;
@@ -105,4 +127,24 @@
 }
 .register__error_show{
     visibility: visible;
+}
+
+@media screen and (max-width: 767px){
+    .register__container{
+        width: 260px;
+        align-items: center;
+    }
+    .register__greeting{
+        margin: 50px 0 80px;
+    }
+    .register__caption-text{
+        font-size: 12px;
+        line-height: 15px;
+        margin: 0 7px 0 0;
+    }
+    .register__caption-link{
+        font-size: 12px;
+        line-height: 15px;
+        margin: 0 7px 0 0;
+    }
 }

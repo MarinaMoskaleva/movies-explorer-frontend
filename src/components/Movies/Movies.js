@@ -8,7 +8,6 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 // import NotFound from "./NotFound/NotFound";
 
 function Movies({movies}) {
-    console.log(movies);
     return (
         <div className='movies'>
             <Header isActive={true}/>

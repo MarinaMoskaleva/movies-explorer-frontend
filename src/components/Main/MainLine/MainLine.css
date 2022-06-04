@@ -18,3 +18,14 @@
     margin: 0 0 23px;
     padding: 0;
 }
+@media screen and (max-width: 767px){
+    .main-line{
+        margin: 0 18px;
+    }
+    .main-line__text{
+        font-size: 18px;
+        line-height: 24px;
+        margin: 0 0 28px;
+        padding: 0;
+    }
+}
