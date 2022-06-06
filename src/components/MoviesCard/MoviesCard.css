@@ -1,0 +1,77 @@
+.card{
+    display: flex;
+    flex-direction: column;
+    background: #FDFDFD;
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
+}
+.card__desc{
+    margin: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card__title{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 18px;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+}
+.card__duration{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: right;
+    color: #A0A0A0;
+    margin: 0;
+    padding: 0;
+}
+.card__img{
+    width: 100%;
+    height: auto;
+}
+.card__button{
+    width: 100px;
+    height: 29px;
+    background: #F9F9F9;
+    border-radius: 30px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 11px;
+    color: #000000;
+    margin: 18px auto;
+    padding: 0;
+    border: none;
+}
+.card__button::before{
+    content: 'Сохранить';
+}
+
+.card__button_saved{
+    background: #FF4062;
+    background-image: url('../../images/saved.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.card__button:hover{
+    opacity: 0.8;
+}
+.card__button_saved::before{
+    content: '';
+}
+
+.card__button_unsaved{
+    background: #F9F9F9;
+    background-image: url('../../images/unsaved.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.card__button_unsaved::before{
+    content: '';
+}
