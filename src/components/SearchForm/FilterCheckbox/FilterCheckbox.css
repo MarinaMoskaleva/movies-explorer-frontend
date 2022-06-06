@@ -20,12 +20,12 @@
     height: 20px;
     width: 36px;
     border-radius: 20px;
-    background-image: url('../../../../images/chb_unactive.svg');
+    background-image: url('../../../images/chb_unactive.svg');
     background-size: cover;
 }
 
 .filter-checkbox_input:checked + .visible-checkbox {
-    background-image: url('../../../../images/chb.png');
+    background-image: url('../../../images/chb.svg');
 }
 
 .filter-checkbox_text{

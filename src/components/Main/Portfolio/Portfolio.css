@@ -47,7 +47,7 @@
 }
 
 .portfolio__ico{
-    background-image: url('../../../images/arrow.png');
+    background-image: url('../../../images/arrow.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

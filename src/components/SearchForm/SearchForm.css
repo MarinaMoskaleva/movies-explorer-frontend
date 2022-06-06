@@ -30,7 +30,7 @@
 .search-form__button{
     width: 44px;
     height: 44px;
-    background-image: url('../../../images/button-find.png');
+    background-image: url('../../images/button-find.svg');
     background-size: cover;
     border: none;
 }
