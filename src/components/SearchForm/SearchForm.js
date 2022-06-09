@@ -2,18 +2,23 @@ import React, { useState, useEffect } from 'react';
 import './SearchForm.css';
 import FilterCheckbox from './FilterCheckbox/FilterCheckbox';
 
-function SearchForm() {
+function SearchForm({onClick}) {
     const [film, setFilm] = useState('');
     const [filmError, setFilmError] = useState('Нужно ввести ключевое слово.');
     const [filmDirty, setFilmDirty] = useState(false);
     const [formValid, setFormValid] = useState(false);
-    function handleFilmChange(e){
+    const [isShortSuitable, setShortSuitable] = useState(false);
+    function onChange(e){
         setFilm(e.target.value);
         if (e.target.value.length === 0){
             setFilmError('Нужно ввести ключевое слово.');
         } else {
             setFilmError('');
         }
+    }
+    function handleButtonClick(e){
+        e.preventDefault();
+        onClick(film, isShortSuitable);
     }
     function blurHandler(e) {
         if (e.target.name === 'film') {
@@ -36,14 +41,19 @@ function SearchForm() {
                         required
                         placeholder='Фильм'
                         value={film}
-                        onChange={handleFilmChange}
+                        onChange={onChange}
                         onBlur={blurHandler}
                     />
                     <span className={`search-form__error ${(filmDirty && filmError) && 'search-form__error_show'}`}>{filmError}</span>
                 </label>
-                <button className={`search-form__button ${!formValid && 'search-form__button_disabled'}`} disabled={!formValid}></button>
+                <button 
+                    className={`search-form__button ${!formValid && 'search-form__button_disabled'}`} 
+                    disabled={!formValid}
+                    type='submit'
+                    onClick={handleButtonClick}
+                ></button>
             </div>
-            <FilterCheckbox />
+            <FilterCheckbox onCheckBoxClick={setShortSuitable}/>
         </form>
     );
 }

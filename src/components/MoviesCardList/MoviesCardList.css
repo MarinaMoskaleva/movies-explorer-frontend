@@ -12,6 +12,7 @@
 .card-item{
     display: flex;
     flex-direction: column;
+    width: 360px;
 }
 @media screen and (max-width: 1279px){
     .card-list {
@@ -26,6 +27,9 @@
         column-gap: 24px;
         margin-bottom: 30px;
     }
+    .card-item{
+        width: 342px;
+    }
 }
 @media screen and (max-width: 767px){
     .card-list {
@@ -33,6 +37,9 @@
         width: calc(100% - 20px);
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         column-gap: 16px;
+    }
+    .card-item{
+        width: 300px;
     }
 }
 
