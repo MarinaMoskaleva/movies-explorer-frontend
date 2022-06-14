@@ -1,17 +1,16 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
-import { savedMoviesData } from '../../utils/initialData'
 import Error from '../Error/Error';
 import moviesApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
-import {filterMoviesArray} from '../../utils/utils';
+import { filterMoviesArray, markSavedMovies } from '../../utils/utils';
 import { registerErrors, profileErrors, loginErrors } from '../../utils/errorMessage';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -19,65 +18,48 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [savedMoviesByKeywords, setSavedMoviesByKeywords] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isDataFound, setDataFound] = useState(false);
+  const [isMovieFound, setMovieFound] = useState(false);
+  const [isSavedMovieFound, setSavedMovieFound] = useState(false);
   const [isDataEmpty, setDataEmpty] = useState(false);
   const [isSomethingWrong, setSomethingWrong] = useState(false);
   const [errorReg, setErrorReg] = useState('');
   const [errorLog, setErrorLog] = useState('');
   const [infoProf, setInfoProf] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
-
   const [currentUser, setCurrentUser] = useState({name:'', email:''});
+  const [currentSavedMovies, setCurrentSavedMovies] = useState([]);
+  const [keywords, setKeywords] = useState('');
+  const [isShortFilmsSuitable, setShortFilmsSuitable] = useState(false);
   const history = useHistory();
-
-  // function tokenCheck () {
-  //   const jwt = localStorage.getItem('token');
-  //   console.log('jwt',jwt);
-  //   if (jwt){
-  //     setLoggedIn(true);
-  //     console.log('setLoggedIn', loggedIn);
-      
-  //     // mainApi.getContent(jwt)
-  //     // .then((data) => {
-  //     //   if (data){
-  //     //     setCurrentUser({name: data.user.name, email: data.user.email});
-  //     //     setLoggedIn(true);
-  //     //   }
-  //     // })
-  //     // .catch((err)=>{
-  //     //   console.log(err);
-  //     // });
-  //   }
-  // }
+  
   useEffect(() => {
     const jwt = localStorage.getItem('token');
-    console.log('useEffect jwt', jwt);
     if (jwt) {
-      mainApi.getUser()
-        .then((res) => {
-          console.log('res', res);
-          if (res) {
-            setLoggedIn(true);
-            history.push('/movies')
-          }
+      Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
+      .then(([userData, savMoviesData])=>{
+        if (userData){
+          setLoggedIn(true);
+          setCurrentUser(userData.user);
+          setCurrentSavedMovies(savMoviesData.movies);
+          history.push('/movies')
+        }
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch((err)=>{
+          console.log(err);
+        });
     }
   }, [loggedIn]);
-  // useEffect(() => {
-  //   const jwt = localStorage.getItem('token');
-  //   console.log("поменялся loggedIn", loggedIn);
-  //   console.log("localStorage", localStorage.getItem('token'));
-  //   if (jwt) {
-  //     console.log('Зашли');
-  //     setLoggedIn(true);
-  //   }
-  // },[loggedIn]);
 
-  
+  useEffect(() => {
+   if (isMovieFound) {
+      setMovies(markSavedMovies(movies, currentSavedMovies));
+    }
+    if (isSavedMovieFound) {
+      setSavedMoviesByKeywords(filterMoviesArray(isShortFilmsSuitable, currentSavedMovies, keywords));
+    }
+  }, [currentSavedMovies]);
   
   function formMoviesData(MoviesArr){
     return MoviesArr.map(item => {
@@ -91,36 +73,37 @@ function App() {
         trailerLink: item.trailerLink,
         nameRU: item.nameRU,
         nameEN: item.nameEN,
-        thumbnail: item.thumbnail,
-        movieId: item.id
+        thumbnail: 'https://api.nomoreparties.co'+item.image.formats.thumbnail.url,
+        movieId: item.id,
+        isSaved: false
       }
     })
   }
   function getMoviesData(keywordsData, shortData){
     setLoading(true);
     setDataEmpty(false);
-    setDataFound(false);
+    setMovieFound(false);
     moviesApi.getMovies()
     .then(moviesData=>{
       setLoading(false);
-      setDataFound(true);
+      setMovieFound(true);
       if (moviesData.length === 0){
         setDataEmpty(true);
       } else {
-        setMovies(filterMoviesArray(shortData, formMoviesData(moviesData), keywordsData));
+        setMovies(filterMoviesArray(shortData, formMoviesData(moviesData), keywordsData, currentSavedMovies));
       }
       
     })
     .catch((err)=>{
       setLoading(false);
-      setDataFound(false);
+      setMovieFound(false);
       setSomethingWrong(true);
       console.log(err);
     });
   }
   function handleRegister(name, email, password) {
     mainApi.register(name, email, password)
-        .then((data)=>{
+        .then(()=>{
           handleLogin(email, password);
         })
         .catch((err)=>{
@@ -136,17 +119,7 @@ function App() {
         .then((data)=>{
           if (data.token){
             localStorage.setItem('token', data.token);
-            console.log('data.token', data.token);
-            console.log('localStorage.token',localStorage.getItem('token'));
             setLoggedIn(true);
-            return mainApi.getUser()
-            .then((data) => {
-              setCurrentUser({name: data.user.name, email: data.user.email});
-              history.push('/movies');
-            })
-            .catch((err)=>{
-              console.log(err);
-            });
           }
         })
         .catch((err)=>{
@@ -180,6 +153,54 @@ function App() {
       setLoggedIn(false);
     }
   }
+  function handleButtonSaveMovie(data) {
+    mainApi.postSavedMovie(data)
+        .then((data)=>{
+          setCurrentSavedMovies([data.movie, ...currentSavedMovies]);
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+  }
+  function handleButtonDeleteMovie(movieId) {
+    console.log('delete', movieId);
+    mainApi.deleteMovie(movieId)
+        .then((data)=>{
+          console.log('delete data', data);
+          setCurrentSavedMovies(currentSavedMovies.filter(item => item.movieId !== data.movieId));
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+  }
+
+  function getSavedMoviesData(keywordsData, shortData){
+    console.log('getSavedMoviesData')
+    setLoading(true);
+    setDataEmpty(false);
+    setSavedMovieFound(false);
+    setKeywords(keywordsData);
+    setShortFilmsSuitable(shortData);
+    mainApi.getSavedMovies()
+    .then(moviesData=>{
+      console.log('savedMoviesData', moviesData);
+      setLoading(false);
+      setSavedMovieFound(true);
+      if (moviesData.length === 0){
+        setDataEmpty(true);
+      } else {
+        setSavedMoviesByKeywords(filterMoviesArray(shortData, moviesData.movies, keywordsData));
+      }
+      
+    })
+    .catch((err)=>{
+      setLoading(false);
+      setSavedMovieFound(false);
+      setSomethingWrong(true);
+      console.log(err);
+    });
+  }
+
   function clearErrorMessages(){
     !(Object.keys(infoProf).length === 0) && setInfoProf({});
     errorReg && setErrorReg('');
@@ -192,13 +213,13 @@ function App() {
       <div className='root' onClick={clearErrorMessages}>
         <Switch>
             <Route path="/signup">
-              <Register onRegSubmit={handleRegister} error={errorReg}/>
+              {loggedIn ? <Redirect to='/movies'/> : <Register onRegSubmit={handleRegister} error={errorReg}/>}
             </Route>
             <Route path="/signin">
-              <Login  handleLogin={handleLogin}  error={errorLog}/>
+              {loggedIn ? <Redirect to='/movies'/> : <Login handleLogin={handleLogin} error={errorLog}/>}
             </Route>
             <Route exact path="/">
-              <Main />
+              <Main loggedIn={loggedIn}/>
             </Route>
             <ProtectedRoute 
               path="/profile"
@@ -214,13 +235,19 @@ function App() {
               movies={movies}
               onButtonSearchClick={getMoviesData}
               loading={loading}
-              isDataFound={isDataFound}
+              isDataFound={isMovieFound}
+              onButtonSaveMovieClick={handleButtonSaveMovie}
+              onButtonDeleteMovieClick={handleButtonDeleteMovie}
               component={Movies}
             />
             <ProtectedRoute 
               path="/saved-movies"
               loggedIn={loggedIn} 
-              movies={savedMoviesData}
+              movies={savedMoviesByKeywords}
+              onButtonSearchClick={getSavedMoviesData}
+              loading={loading}
+              isDataFound={isMovieFound}
+              onButtonDeleteMovieClick={handleButtonDeleteMovie}
               isOpenSavedMovies={true}
               component={SavedMovies}
             />

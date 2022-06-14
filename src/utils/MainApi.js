@@ -65,19 +65,47 @@ class MainApi {
         })
         .then(this._getResponseData);
       }
-      getContent(token) {
-        return fetch(`${this._mainUrl}/users/me`, {
-          method: 'GET',
+      getSavedMovies() {
+        return fetch(`${this._mainUrl}/movies`, {
+              headers: {
+                  authorization: `Bearer ${localStorage.getItem('token')}`
+              }
+          })
+          .then(this._getResponseData);
+      }
+      postSavedMovie(data){
+        return fetch(`${this._mainUrl}/movies`, {
+          method: 'POST',
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            country: data.country,
+            director: data.director,
+            duration: data.duration,
+            year: data.year,
+            description: data.description,
+            image: data.image,
+            trailerLink: data.trailerLink,
+            nameRU: data.nameRU,
+            nameEN: data.nameEN,
+            thumbnail: data.thumbnail,
+            movieId: data.movieId
+          })
+        })
+        .then(this._getResponseData);
+      }
+      deleteMovie(movieId){
+        return fetch(`${this._mainUrl}/movies/${movieId}`, {
+          method: 'DELETE',
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
           }
         })
-        .then(res => res.json())
-        .then(data => data)
+        .then(this._getResponseData);
       }
-    
 }
 
 const mainApi = new MainApi(mainUrl);

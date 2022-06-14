@@ -3,9 +3,11 @@ import './FilterCheckbox.css';
 
 function FilterCheckbox({onCheckBoxClick}) {
     const [checked, setChecked] = useState(false);
-    function changeCheckbox() {
-      setChecked(!checked);
-      onCheckBoxClick(!checked);
+   
+    function changeCheckbox() { 
+        console.log('checked', checked);
+        setChecked(!checked);
+        onCheckBoxClick(!checked);
     }
     return (
         <div className="filter-checkbox">

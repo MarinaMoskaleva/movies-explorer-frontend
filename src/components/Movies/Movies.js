@@ -4,12 +4,11 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import Preloader from "./Preloader/Preloader";
-import NotFound from "./NotFound/NotFound";
+import Preloader from "../Preloader/Preloader";
+import NotFound from "../NotFound/NotFound";
 
-function Movies({movies, onButtonSearchClick, loading, isDataFound}) {
+function Movies({movies, onButtonSearchClick, loading, isDataFound, onButtonSaveMovieClick, onButtonDeleteMovieClick}) {
     const [isDataEmpty, setDataEmpty] = useState(false);
-
     useEffect(() => {
         console.log('isDataFound', isDataFound);
         if (movies.length === 0) {
@@ -25,7 +24,7 @@ function Movies({movies, onButtonSearchClick, loading, isDataFound}) {
             <SearchForm onClick={onButtonSearchClick}/>
             {loading && <Preloader />}
             {isDataFound && isDataEmpty && <NotFound />}
-            {isDataFound && !isDataEmpty && <MoviesCardList movies={movies}/>}
+            {isDataFound && !isDataEmpty && <MoviesCardList movies={movies} onButtonSaveMovieClick={onButtonSaveMovieClick} onButtonDeleteMovieClick={onButtonDeleteMovieClick}/>}
             {isDataFound && !isDataEmpty && <button className="movies__even-more">Еще</button>}
             <Footer />
         </div>

@@ -5,6 +5,7 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
+    min-height: 100vh;
 }
 .movies__even-more{
     width: calc(100% - 140px);

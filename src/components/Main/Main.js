@@ -7,7 +7,7 @@ import AboutMe from "./AboutMe/AboutMe";
 import Footer from "../Footer/Footer";
 import Portfolio from "./Portfolio/Portfolio";
 
-function Main() {
+function Main({loggedIn}) {
     const myRef = React.createRef();
   
   function handleClick() {
@@ -15,7 +15,7 @@ function Main() {
   }
     return (
         <div className='main'>
-            <PinkColor handleClick={handleClick}/>
+            <PinkColor handleClick={handleClick} loggedIn={loggedIn}/>
             <AboutProject ref={myRef}/>
             <Techs />
             <AboutMe />
