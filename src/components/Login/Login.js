@@ -3,7 +3,7 @@ import './Login.css'
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
 import { EMAIL_REGEX } from '../../utils/constants';
-import { useFormWithValidation } from '../../utils/validation';
+import { useFormWithValidation } from '../../customHooks/validation';
 
 function Login({handleLogin, error}) {
     const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();

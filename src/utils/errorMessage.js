@@ -11,13 +11,11 @@ export const loginErrors = {
     "invalidToken": "При авторизации произошла ошибка. Токен не передан или передан не в том формате.",
     "incorrectToken": "При авторизации произошла ошибка. Переданный токен некорректен."
 }
-export const errorsWithCode = [
-    {
+export const notFoundPage = {
         "code": 404,
         "text": "Страница по указанному маршруту не найдена."
-    },
-    {
+}
+export const errorOnServer = {
         "code": 500,
         "text": "На сервере произошла ошибка."
-    }
-]
+}

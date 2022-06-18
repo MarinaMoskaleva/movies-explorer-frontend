@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import './Movies.css';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
@@ -6,26 +6,22 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
 import NotFound from "../NotFound/NotFound";
+import ServerError from '../ServerError/ServerError'
 
-function Movies({movies, onButtonSearchClick, loading, isDataFound, onButtonSaveMovieClick, onButtonDeleteMovieClick}) {
-    const [isDataEmpty, setDataEmpty] = useState(false);
-    useEffect(() => {
-        console.log('isDataFound', isDataFound);
-        if (movies.length === 0) {
-            setDataEmpty(true);
-        } else {
-            setDataEmpty(false);
-        }
-    }, [movies]);
+function Movies({movies, onButtonSearchClick, loading, isDataFound, onButtonSaveMovieClick, onButtonDeleteMovieClick, keywords, isShort, isDataEmpty, isSomethingWrong}) {
 
     return (
         <div className='movies'>
-            <Header isActive={true}/>
-            <SearchForm onClick={onButtonSearchClick}/>
-            {loading && <Preloader />}
-            {isDataFound && isDataEmpty && <NotFound />}
-            {isDataFound && !isDataEmpty && <MoviesCardList movies={movies} onButtonSaveMovieClick={onButtonSaveMovieClick} onButtonDeleteMovieClick={onButtonDeleteMovieClick}/>}
-            {isDataFound && !isDataEmpty && <button className="movies__even-more">Еще</button>}
+            <div className='movies__top'>
+                <Header isActive={true}/>
+                <SearchForm onClick={onButtonSearchClick} keywords={keywords} isShort={isShort}/>
+                {isSomethingWrong && <ServerError />}
+                {loading && <Preloader />}
+                {isDataFound && 
+                    isDataEmpty ?
+                        <NotFound /> :
+                        <MoviesCardList movies={movies} onButtonSaveMovieClick={onButtonSaveMovieClick} onButtonDeleteMovieClick={onButtonDeleteMovieClick}/>}
+            </div>
             <Footer />
         </div>
     );

@@ -3,7 +3,7 @@ import './Register.css'
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
 import { EMAIL_REGEX } from '../../utils/constants';
-import { useFormWithValidation } from '../../utils/validation';
+import { useFormWithValidation } from '../../customHooks/validation';
 
 function Register({onRegSubmit, error}) {
     
@@ -11,7 +11,6 @@ function Register({onRegSubmit, error}) {
 
     function handleSubmit(e){
         e.preventDefault();
-        console.log('handleSubmit', values);
         if (!values.name || !values.email || !values.pass){
             return;
         }

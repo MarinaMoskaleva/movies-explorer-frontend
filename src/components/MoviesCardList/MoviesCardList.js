@@ -1,44 +1,63 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { MAX_NUMBER_OF_CARDS_1280, ADDED_NUMBER_OF_CARDS_1280 } from '../../utils/constants';
+import EvenMore from './EvenMore/EvenMore';
+import {    MAX_NUMBER_OF_CARDS_1280,
+            ADDED_NUMBER_OF_CARDS_1280,
+            MAX_NUMBER_OF_CARDS_768,
+            ADDED_NUMBER_OF_CARDS_768,
+            MAX_NUMBER_OF_CARDS_320,
+            ADDED_NUMBER_OF_CARDS_320,
+        } from '../../utils/constants';
+import { useWindowSize } from '../../customHooks/defineWindowSize';
 
 function MoviesCardList({movies, isOpenSavedMovies=false, onButtonSaveMovieClick, onButtonDeleteMovieClick}) {
-    function useWindowSize() {
-        const [size, setSize] = useState([0, 0]);
-        useLayoutEffect(() => {
-          function updateSize() {
-            setSize([window.innerWidth, window.innerHeight]);
-          }
-          window.addEventListener('resize', updateSize);
-          updateSize();
-          return () => window.removeEventListener('resize', updateSize);
-        }, []);
-        console.log('size', size);
-        return size;
-    }
+    const [numberOfCard, setNumberOfCard] = useState(0);
+    const [addedNumberOfCard, setAddedNumberOfCard] = useState(0);
+    const [isButtonEvenMoreVisible, setButtonEvenMoreVisible] = useState(false);
     
     const [width, height] = useWindowSize();
     useEffect(() => {
-        if (width > 1279){
-            console.log("Ширина 1280 или больше")
-        } else if (width > 767) {
-            console.log("Ширина 768 или больше")
+        if (movies.length > numberOfCard){
+            setButtonEvenMoreVisible(true);
         } else {
-            console.log("Ширина 320 или больше")
+            setButtonEvenMoreVisible(false);
+        }
+
+    },[numberOfCard]);
+    useEffect(() => {
+        if (width > 1279){
+            setNumberOfCard(MAX_NUMBER_OF_CARDS_1280);
+            setAddedNumberOfCard(ADDED_NUMBER_OF_CARDS_1280);
+        } else if (width > 635) {
+            setNumberOfCard(MAX_NUMBER_OF_CARDS_768);
+            setAddedNumberOfCard(ADDED_NUMBER_OF_CARDS_768);
+        } else {
+            setNumberOfCard(MAX_NUMBER_OF_CARDS_320);
+            setAddedNumberOfCard(ADDED_NUMBER_OF_CARDS_320);
         }
 
     },[width])
 
+    function addCards() {
+        setNumberOfCard(numberOfCard+addedNumberOfCard);
+    }
+
 
     return (
-        <div className="card-list">
-            {movies.map((item) => (
-                <div className="card-item" key={item.movieId}>
-                    <MoviesCard movie={item} isOpenSavedMovies={isOpenSavedMovies} onButtonSaveMovieClick={onButtonSaveMovieClick} onButtonDeleteMovieClick={onButtonDeleteMovieClick}/>
-                </div>
-            ))}
+        <div className='cards'>
+             <div className="card-list">
+                {movies.slice(0, numberOfCard)
+                        .map((item) => (
+                            <div className="card-item" key={item.movieId}>
+                                <MoviesCard movie={item} isOpenSavedMovies={isOpenSavedMovies} onButtonSaveMovieClick={onButtonSaveMovieClick} onButtonDeleteMovieClick={onButtonDeleteMovieClick}/>
+                            </div>
+                            ))
+                }
+            </div>
+            {!isOpenSavedMovies && isButtonEvenMoreVisible && <EvenMore onClick={addCards}/>}
         </div>
+       
     );
 }
 

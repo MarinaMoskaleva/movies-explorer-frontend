@@ -1,7 +1,7 @@
 import React from 'react';
 import './Error.css';
 import { useHistory } from 'react-router-dom';
-import { errorsWithCode } from '../../utils/errorMessage';
+import { notFoundPage } from '../../utils/errorMessage';
 
 function Error() {
     const history = useHistory();
@@ -10,8 +10,8 @@ function Error() {
     }
     return (
         <section className="error">
-            <h3 className="error__code">{errorsWithCode[0].code}</h3>
-            <p className="error__text">{errorsWithCode[0].text}</p>
+            <h3 className="error__code">{notFoundPage.code}</h3>
+            <p className="error__text">{notFoundPage.text}</p>
             <p className="error__go-back" onClick={onGoBackClick}>Назад</p>
             
         </section>

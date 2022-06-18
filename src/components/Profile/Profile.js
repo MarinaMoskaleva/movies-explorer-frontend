@@ -4,22 +4,17 @@ import Header from '../Header/Header';
 import { Link } from 'react-router-dom';
 import { EMAIL_REGEX } from '../../utils/constants';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { useFormWithValidation } from '../../utils/validation';
+import { useFormWithValidation } from '../../customHooks/validation';
 
 function Profile({handleProfile, info, handleSignOut}) {
     const currentUser = React.useContext(CurrentUserContext);
-
-    // const [visibleButton, setVisibleButton] = useState(false);
-    // const [hideEdit, setHideEdit] = useState(false);
-    // const [hideSignOut, setHideSignOut] = useState(false);
-    // const [inputIsReadOnly, setInputIsReadOnly] = useState(true);
+    
     const [isInputInactive, setInputInactive] = useState(true);
 
     const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
 
     function handleSubmit(e){
         e.preventDefault();
-        console.log('handleSubmit', values);
         if (!values.name || !values.email ){
             return;
         }

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './SearchForm.css';
 import FilterCheckbox from './FilterCheckbox/FilterCheckbox';
 
-function SearchForm({onClick}) {
-    const [film, setFilm] = useState('');
+function SearchForm({onClick, keywords, isShort}) {
+    const [film, setFilm] = useState(keywords || '');
     const [filmError, setFilmError] = useState('Нужно ввести ключевое слово.');
     const [filmDirty, setFilmDirty] = useState(false);
     const [formValid, setFormValid] = useState(false);
-    const [isShortSuitable, setShortSuitable] = useState(false);
+    const [isShortSuitable, setShortSuitable] = useState(isShort);
+    
     function onChange(e){
         setFilm(e.target.value);
         if (e.target.value.length === 0){
@@ -47,13 +48,13 @@ function SearchForm({onClick}) {
                     <span className={`search-form__error ${(filmDirty && filmError) && 'search-form__error_show'}`}>{filmError}</span>
                 </label>
                 <button 
-                    className={`search-form__button ${!formValid && 'search-form__button_disabled'}`} 
-                    disabled={!formValid}
+                    className={`search-form__button ${(!formValid && !keywords) && 'search-form__button_disabled'}`} 
+                    disabled={(!formValid && !keywords)}
                     type='submit'
                     onClick={handleButtonClick}
                 ></button>
             </div>
-            <FilterCheckbox onCheckBoxClick={setShortSuitable}/>
+            <FilterCheckbox onCheckBoxClick={setShortSuitable} initState={isShort}/>
         </form>
     );
 }
