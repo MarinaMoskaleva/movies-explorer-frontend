@@ -106,6 +106,18 @@ class MainApi {
         })
         .then(this._getResponseData);
       }
+      getContent(token) {
+      return fetch(`${this._mainUrl}/users/me`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      })
+      .then(res => res.json())
+      .then(data => data)
+    }
 }
 
 const mainApi = new MainApi(mainUrl);

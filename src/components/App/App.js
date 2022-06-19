@@ -41,10 +41,37 @@ function App() {
   function tokenCheck () {
     const jwt = localStorage.getItem('token');
     if (jwt){
-      Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
+      mainApi.getContent(jwt)
+      .then((res) => {
+        if (res){
+          setLoggedIn(true);
+          // history.push('/');
+        }
+      })
+      .catch((err)=>{
+        console.log(err);
+      });
+
+
+      // Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
+      // .then(([userData, savMoviesData])=>{
+      //   if (userData){
+      //     setCurrentUser(userData.user);
+      //     setCurrentSavedMovies(savMoviesData.movies);
+      //   }
+      //   })
+      //   .catch((err)=>{
+      //     console.log(err);
+      //   });
+    }
+  }
+  
+  useEffect(() => {
+    tokenCheck();
+
+    Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
       .then(([userData, savMoviesData])=>{
         if (userData){
-          setLoggedIn(true);
           setCurrentUser(userData.user);
           setCurrentSavedMovies(savMoviesData.movies);
         }
@@ -52,11 +79,6 @@ function App() {
         .catch((err)=>{
           console.log(err);
         });
-    }
-  }
-  
-  useEffect(() => {
-    tokenCheck();
 
     const initialKeywordsMovies = localStorage.getItem('keywords');
           if (initialKeywordsMovies) {

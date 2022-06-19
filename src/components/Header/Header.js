@@ -16,7 +16,7 @@ function Header({isActive}) {
     return (
         <header className="header">
             <Logo />
-            {isActive && (width > 1023 ? <Navigation /> : <BurgerNavigation />)}
+            {isActive && (width > 768 ? <Navigation /> : <BurgerNavigation />)}
             <div className={`header__inter ${isActive && 'header__inter_hide'}`}>
                 <Link to='/signup' href="#" className="header__text">Регистрация</Link>
                 <button className="header__button-signin" onClick={onButtonSignInClick}>Войти</button>
