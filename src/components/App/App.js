@@ -14,6 +14,7 @@ import { filterMoviesArray, markSavedMovies } from '../../utils/utils';
 import { registerErrors, profileErrors, loginErrors } from '../../utils/errorMessage';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import Preloader from '../Preloader/Preloader';
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
   const [errorLog, setErrorLog] = useState('');
   const [infoProf, setInfoProf] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isTokenValidated, setIsTokenValidated] = useState(false);
+
   const [currentUser, setCurrentUser] = useState({name:'', email:''});
   const [currentSavedMovies, setCurrentSavedMovies] = useState([]);
   const [keywordsMovies, setKeywordsMovies] = useState('');
@@ -37,37 +40,28 @@ function App() {
   const [isShortSavedMovieSuitable, setShortSavedMovieSuitable] = useState(false);
   const [isShortMovieSuitable, setShortMovieSuitable] = useState(false);
   const history = useHistory();
-
-  function tokenCheck () {
+  
+  useEffect(() => {
     const jwt = localStorage.getItem('token');
     if (jwt){
+      
       mainApi.getContent(jwt)
       .then((res) => {
         if (res){
           setLoggedIn(true);
-          // history.push('/');
         }
       })
       .catch((err)=>{
         console.log(err);
-      });
+      })
+      .then(() => setIsTokenValidated(true));
+    } else {
+      setIsTokenValidated(true);
+   }
 
-
-      // Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
-      // .then(([userData, savMoviesData])=>{
-      //   if (userData){
-      //     setCurrentUser(userData.user);
-      //     setCurrentSavedMovies(savMoviesData.movies);
-      //   }
-      //   })
-      //   .catch((err)=>{
-      //     console.log(err);
-      //   });
-    }
-  }
+  }, [])
   
   useEffect(() => {
-    tokenCheck();
 
     Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
       .then(([userData, savMoviesData])=>{
@@ -285,16 +279,20 @@ function App() {
     errorLog && setErrorLog('');
   };
 
+  if (!isTokenValidated) return <Preloader />;
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='root' onClick={clearErrorMessages}>
         <Switch>
             <Route path="/signup">
-              {loggedIn ? <Redirect to='/movies'/> : <Register onRegSubmit={handleRegister} error={errorReg}/>}
+              {/* {loggedIn ? <Redirect to='/movies'/> : <Register onRegSubmit={handleRegister} error={errorReg}/>} */}
+              <Register onRegSubmit={handleRegister} error={errorReg}/>
             </Route>
             <Route path="/signin">
-              {loggedIn ? <Redirect to='/movies'/> : <Login handleLogin={handleLogin} error={errorLog}/>}
+              {/* {loggedIn ? <Redirect to='/movies'/> : <Login handleLogin={handleLogin} error={errorLog}/>} */}
+              <Login handleLogin={handleLogin} error={errorLog}/>
             </Route>
             <Route exact path="/">
               <Main loggedIn={loggedIn}/>
