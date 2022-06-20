@@ -3,6 +3,7 @@ import './Register.css'
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
 import { EMAIL_REGEX } from '../../utils/constants';
+import validator from 'validator';
 import { useFormWithValidation } from '../../customHooks/validation';
 
 function Register({onRegSubmit, error}) {
@@ -11,7 +12,7 @@ function Register({onRegSubmit, error}) {
 
     function handleSubmit(e){
         e.preventDefault();
-        if (!values.name || !values.email || !values.pass){
+        if (!values.name || !validator.isEmail(values.email) || !values.pass){
             return;
         }
         onRegSubmit(values.name, values.email, values.pass);
@@ -19,6 +20,7 @@ function Register({onRegSubmit, error}) {
     useEffect(() => {
         resetForm({}, {}, false);
       }, [resetForm]);
+      
     return (
         <section className="register">
             <div className="register__container">
@@ -43,16 +45,15 @@ function Register({onRegSubmit, error}) {
                     <label className="register__form-field">Email
                         <input
                             id="register-email-input"
-                            type="text"
+                            type="email"
                             className="register__input"
                             name="email"
                             required
-                            pattern={EMAIL_REGEX}
                             placeholder="Email"
                             value={values.email || ''}
                             onChange={handleChange}
                         />
-                        <span className='register__error-validation register__error-validation_show'>{errors.email || ''}</span>
+                        <span className='register__error-validation register__error-validation_show'>{() => { return validator.isEmail(values.email) ? '' : errors.email}}</span>
                     </label>
                     <label className="register__form-field">Пароль
                         <input
