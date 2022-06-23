@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import './Login.css'
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
-import { EMAIL_REGEX } from '../../utils/constants';
+import validator from 'validator';
 import { useFormWithValidation } from '../../customHooks/validation';
 
 function Login({handleLogin, error}) {
@@ -33,12 +33,13 @@ function Login({handleLogin, error}) {
                             className="login__input"
                             name="email"
                             required
-                            pattern={EMAIL_REGEX}
                             placeholder="Email"
                             value={values.email || ''}
                             onChange={handleChange}
                         />
-                        <span className='login__error-validation login__error-validation_show'>{errors.email || ''}</span>
+                        <span className='login__error-validation login__error-validation_show'>
+                            { values.email ? (validator.isEmail(values.email) ? '' : 'Некорректный email') : '' || errors.email}
+                        </span>
                     </label>
                     <label className="login__form-field">Password
                         <input

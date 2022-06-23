@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import './Register.css'
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
-import { EMAIL_REGEX } from '../../utils/constants';
 import validator from 'validator';
 import { useFormWithValidation } from '../../customHooks/validation';
 
@@ -53,7 +52,9 @@ function Register({onRegSubmit, error}) {
                             value={values.email || ''}
                             onChange={handleChange}
                         />
-                        <span className='register__error-validation register__error-validation_show'>{() => { return validator.isEmail(values.email) ? '' : errors.email}}</span>
+                        <span className='register__error-validation register__error-validation_show'>
+                            { values.email ? (validator.isEmail(values.email) ? '' : 'Некорректный email') : '' || errors.email}
+                        </span>
                     </label>
                     <label className="register__form-field">Пароль
                         <input

@@ -8,12 +8,12 @@ import Preloader from "../Preloader/Preloader";
 import NotFound from "../NotFound/NotFound";
 import ServerError from "../ServerError/ServerError";
 
-function SavedMovies({movies, isOpenSavedMovies, onButtonSearchClick, loading, isDataFound, onButtonDeleteMovieClick, keywords, isShort, isDataEmpty, isSomethingWrong}) {
+function SavedMovies({movies, isOpenSavedMovies, onButtonSearchClick, loading, isDataFound, onButtonDeleteMovieClick, isDataEmpty, isSomethingWrong}) {
     return (
         <div className='saved-movies'>
             <div className='saved-movies__top'>
                 <Header isActive={true}/>
-                <SearchForm onClick={onButtonSearchClick} keywords={keywords} isShort={isShort}/>
+                <SearchForm onClick={onButtonSearchClick}/>
                 {isSomethingWrong && <ServerError />}
                 {loading && <Preloader />}
                 {isDataFound && 

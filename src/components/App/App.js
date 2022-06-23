@@ -19,6 +19,7 @@ import Preloader from '../Preloader/Preloader';
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [allMovies, setAllMovies] = useState([]);
   const [savedMoviesByKeywords, setSavedMoviesByKeywords] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isMovieFound, setMovieFound] = useState(false);
@@ -44,25 +45,34 @@ function App() {
   useEffect(() => {
     const jwt = localStorage.getItem('token');
     if (jwt){
-      
       mainApi.getContent(jwt)
-      .then((res) => {
-        if (res){
-          setLoggedIn(true);
-        }
-      })
-      .catch((err)=>{
-        console.log(err);
-      })
-      .then(() => setIsTokenValidated(true));
+        .then((res) => {
+          if (res){
+            setLoggedIn(true);
+          }
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+        .then(() => setIsTokenValidated(true));
     } else {
       setIsTokenValidated(true);
    }
+   moviesApi.getMovies()
+    .then(moviesData=>{
+      setSomethingWrongMovies(false);
+      setAllMovies(formMoviesData(moviesData));
+    })
+     .catch((err)=>{
+      setSomethingWrongMovies(true);
+       console.log(err);
+    });
+
+   
 
   }, [])
   
   useEffect(() => {
-
     Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
       .then(([userData, savMoviesData])=>{
         if (userData){
@@ -75,35 +85,35 @@ function App() {
         });
 
     const initialKeywordsMovies = localStorage.getItem('keywords');
-          if (initialKeywordsMovies) {
-            setKeywordsMovies(initialKeywordsMovies);
-          }
-          const initialKeywordsSavedMovies = localStorage.getItem('keywordsSavedMovies');
-          if (initialKeywordsSavedMovies) {
-            setKeywordsSavedMovies(initialKeywordsSavedMovies);
-          }
-          const initialMoviesData = localStorage.getItem('initialMovies');
-          if (initialMoviesData) {
-            setMovies(JSON.parse(initialMoviesData));
-            setMovieFound(true);
-          }
-          const initialShortMoviesData = localStorage.getItem('shortMovie');
-          if (initialShortMoviesData) {
-            setShortMovieSuitable(JSON.parse(initialShortMoviesData));
-          }
-          const initialSavedMoviesData = localStorage.getItem('initialSavedMovies');
-          if (initialSavedMoviesData) {
-            setSavedMoviesByKeywords(JSON.parse(initialSavedMoviesData));
-            setSavedMovieFound(true);
-          }
-          const initialShortSavedMoviesData = localStorage.getItem('shortSavedMovie');
-          if (initialShortSavedMoviesData) {
-            setShortSavedMovieSuitable(JSON.parse(initialShortSavedMoviesData));
-          }
+    initialKeywordsMovies && setKeywordsMovies(initialKeywordsMovies);
+    
+    // const initialKeywordsSavedMovies = localStorage.getItem('keywordsSavedMovies');
+    // console.log('initialKeywordsSavedMovies', initialKeywordsSavedMovies);
+    // initialKeywordsSavedMovies && setKeywordsSavedMovies(initialKeywordsSavedMovies);
+         
+    const initialMoviesData = localStorage.getItem('initialMovies');
+    if (initialMoviesData) {
+      setMovies(JSON.parse(initialMoviesData));
+      setMovieFound(true);
+    }
+    
+    const initialShortMoviesData = localStorage.getItem('shortMovie');
+    initialShortMoviesData && setShortMovieSuitable(JSON.parse(initialShortMoviesData));
+    
+    const initialSavedMoviesData = localStorage.getItem('initialSavedMovies');
+    console.log('initialSavedMoviesData', initialSavedMoviesData);
+    if (initialSavedMoviesData) {
+      setSavedMoviesByKeywords(JSON.parse(initialSavedMoviesData));
+      setSavedMovieFound(true);
+    }
+    
+    // const initialShortSavedMoviesData = localStorage.getItem('shortSavedMovie');
+    // initialShortSavedMoviesData && setShortSavedMovieSuitable(JSON.parse(initialShortSavedMoviesData));
     
   },[loggedIn]);
 
   useEffect(() => {
+    console.log('currentSavedMovies', currentSavedMovies);
    if (isMovieFound) {
       setMovies(markSavedMovies(movies, currentSavedMovies));
     }
@@ -138,24 +148,33 @@ function App() {
     setShortMovieSuitable(shortData);
     setLoading(true);
     setMoviesDataEmpty(false);
-    moviesApi.getMovies()
-    .then(moviesData=>{
-      setSomethingWrongMovies(false);
-      setLoading(false);
-      setMovieFound(true);
-      const suitableMovies = filterMoviesArray(shortData, formMoviesData(moviesData), keywordsData, currentSavedMovies)
-      if (suitableMovies.length === 0){
-        setMoviesDataEmpty(true);
-      } else {
-        setMovies(suitableMovies);
-        localStorage.setItem('initialMovies', JSON.stringify(suitableMovies));
-      }
-    })
-    .catch((err)=>{
-      setLoading(false);
-      setSomethingWrongMovies(true);
-      console.log(err);
-    });
+    const suitableMovies = filterMoviesArray(shortData, allMovies, keywordsData, currentSavedMovies);
+    if (suitableMovies.length === 0){
+      setMoviesDataEmpty(true);
+    } else {
+      setMovies(suitableMovies);
+      localStorage.setItem('initialMovies', JSON.stringify(suitableMovies));
+    }
+    setSomethingWrongMovies(false);
+    setLoading(false);
+    // moviesApi.getMovies()
+    // .then(moviesData=>{
+    //   setSomethingWrongMovies(false);
+    //   setLoading(false);
+    //   setMovieFound(true);
+    //   const suitableMovies = filterMoviesArray(shortData, formMoviesData(moviesData), keywordsData, currentSavedMovies)
+    //   if (suitableMovies.length === 0){
+    //     setMoviesDataEmpty(true);
+    //   } else {
+    //     setMovies(suitableMovies);
+    //     localStorage.setItem('initialMovies', JSON.stringify(suitableMovies));
+    //   }
+    // })
+    // .catch((err)=>{
+    //   setLoading(false);
+    //   setSomethingWrongMovies(true);
+    //   console.log(err);
+    // });
   }
   function handleRegister(name, email, password) {
     mainApi.register(name, email, password)
@@ -204,27 +223,29 @@ function App() {
         });
   }
   function handleProfileSignOut(){
-    if (localStorage.getItem('token')){
-      localStorage.removeItem('token');
-      localStorage.removeItem('keywords');
-      localStorage.removeItem('keywordsSavedMovies');
-      localStorage.removeItem('initialMovies');
-      localStorage.removeItem('initialSavedMovies');
-      localStorage.removeItem('shortMovie');
-      localStorage.removeItem('shortSavedMovie');
-      history.push('/');
-      setLoggedIn(false);
-      setMovieFound(false);
-      setSavedMovieFound(false);
-      setKeywordsMovies('');
-      setMovies([]);
-      setKeywordsSavedMovies('');
-      setCurrentSavedMovies([]);
-    }
+    localStorage.removeItem('token');
+    localStorage.removeItem('keywords');
+    // localStorage.removeItem('keywordsSavedMovies');
+    localStorage.removeItem('initialMovies');
+    localStorage.removeItem('initialSavedMovies');
+    localStorage.removeItem('shortMovie');
+    // localStorage.removeItem('shortSavedMovie');
+    history.push('/');
+    setLoggedIn(false);
+    setMovieFound(false);
+    setSavedMovieFound(false);
+    setKeywordsMovies('');
+    setMovies([]);
+    setSavedMoviesByKeywords([])
+    // setKeywordsSavedMovies('');
+    setCurrentSavedMovies([]);
+    // setShortSavedMovieSuitable(false);
+    setShortMovieSuitable(false);
   }
   function handleButtonSaveMovie(data) {
     mainApi.postSavedMovie(data)
         .then((data)=>{
+          console.log('data', data);
           setCurrentSavedMovies([data.movie, ...currentSavedMovies]);
         })
         .catch((err)=>{
@@ -243,25 +264,28 @@ function App() {
   }
 
   function getSavedMoviesData(keywordsData, shortData){
+    console.log('keywordsData', keywordsData, 'shortData', shortData);
     setSavedMoviesByKeywords([]);
-    localStorage.setItem('keywordsSavedMovies', keywordsData);
-    localStorage.setItem('shortSavedMovie', shortData);
+    // localStorage.setItem('keywordsSavedMovies', keywordsData);
+    // localStorage.setItem('shortSavedMovie', shortData);
     setLoading(true);
     setSavedMoviesDataEmpty(false);
     setSavedMovieFound(false);
-    setKeywordsSavedMovies(keywordsData);
-    setShortSavedMovieSuitable(shortData);
+    // setKeywordsSavedMovies(keywordsData);
+    // setShortSavedMovieSuitable(shortData);
     mainApi.getSavedMovies()
     .then(moviesData=>{
+      console.log('moviesData', moviesData);
       setLoading(false);
       setSavedMovieFound(true);
       setSomethingWrongSavedMovies(false);
       const suitableMovies = filterMoviesArray(shortData, moviesData.movies, keywordsData);
+      console.log('suitableMovies', suitableMovies);
       if (suitableMovies.length === 0){
         setSavedMoviesDataEmpty(true);
       } else {
         setSavedMoviesByKeywords(suitableMovies);
-        localStorage.setItem('initialSavedMovies', JSON.stringify(suitableMovies));
+        localStorage.setItem('initialSavedMovies', JSON.stringify(moviesData.movies));
       }
       
     })
@@ -287,12 +311,10 @@ function App() {
       <div className='root' onClick={clearErrorMessages}>
         <Switch>
             <Route path="/signup">
-              {/* {loggedIn ? <Redirect to='/movies'/> : <Register onRegSubmit={handleRegister} error={errorReg}/>} */}
-              <Register onRegSubmit={handleRegister} error={errorReg}/>
+              {loggedIn ? <Redirect to='/movies'/> : <Register onRegSubmit={handleRegister} error={errorReg}/>}
             </Route>
             <Route path="/signin">
-              {/* {loggedIn ? <Redirect to='/movies'/> : <Login handleLogin={handleLogin} error={errorLog}/>} */}
-              <Login handleLogin={handleLogin} error={errorLog}/>
+              {loggedIn ? <Redirect to='/movies'/> : <Login handleLogin={handleLogin} error={errorLog}/>}
             </Route>
             <Route exact path="/">
               <Main loggedIn={loggedIn}/>
@@ -329,8 +351,6 @@ function App() {
               isDataFound={isSavedMovieFound}
               onButtonDeleteMovieClick={handleButtonDeleteMovie}
               isOpenSavedMovies={true}
-              keywords={keywordsSavedMovies}
-              isShort={isShortSavedMovieSuitable}
               isDataEmpty={isSavedMoviesDataEmpty}
               isSomethingWrong={isSomethingWrongSavedMovies}
               component={SavedMovies}
