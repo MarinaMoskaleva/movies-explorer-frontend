@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './SearchForm.css';
 import FilterCheckbox from './FilterCheckbox/FilterCheckbox';
 
-function SearchForm({onClick, keywords='', isShort=false}) {
-    const [film, setFilm] = useState(keywords || '');
+function SearchForm({onClick, keywords='', isShort}) {
+    const [film, setFilm] = useState(keywords);
     const [filmError, setFilmError] = useState('');
     const [filmDirty, setFilmDirty] = useState(false);
     const [formValid, setFormValid] = useState(false);
@@ -48,8 +48,8 @@ function SearchForm({onClick, keywords='', isShort=false}) {
                     <span className={`search-form__error ${(filmDirty && filmError) && 'search-form__error_show'}`}>{filmError}</span>
                 </label>
                 <button 
-                    className={`search-form__button ${(!formValid) && 'search-form__button_disabled'}`} 
-                    disabled={(!formValid)}
+                    className={`search-form__button ${(!formValid || !film) && 'search-form__button_disabled'}`} 
+                    disabled={(!formValid || !film)}
                     type='submit'
                     onClick={handleButtonClick}
                 ></button>

@@ -15,12 +15,13 @@ import { registerErrors, profileErrors, loginErrors } from '../../utils/errorMes
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Preloader from '../Preloader/Preloader';
+import {usePathname} from '../../customHooks/pathname'
 
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [allMovies, setAllMovies] = useState([]);
-  const [savedMoviesByKeywords, setSavedMoviesByKeywords] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isMovieFound, setMovieFound] = useState(false);
   const [isSavedMovieFound, setSavedMovieFound] = useState(false);
@@ -41,6 +42,16 @@ function App() {
   const [isShortSavedMovieSuitable, setShortSavedMovieSuitable] = useState(false);
   const [isShortMovieSuitable, setShortMovieSuitable] = useState(false);
   const history = useHistory();
+
+  const url = usePathname();
+
+  useEffect(() => {
+    if (url === '/saved-movies'){
+      setKeywordsSavedMovies('');
+      setSavedMovies(currentSavedMovies);
+    }
+
+  }, [url])
   
   useEffect(() => {
     const jwt = localStorage.getItem('token');
@@ -65,31 +76,28 @@ function App() {
     })
      .catch((err)=>{
       setSomethingWrongMovies(true);
-       console.log(err);
+      console.log(err);
     });
-
-   
-
   }, [])
   
   useEffect(() => {
+    setSomethingWrongSavedMovies(false);
     Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
       .then(([userData, savMoviesData])=>{
         if (userData){
           setCurrentUser(userData.user);
           setCurrentSavedMovies(savMoviesData.movies);
+          setSavedMovieFound(true);
+          setSavedMovies(savMoviesData.movies);
         }
         })
         .catch((err)=>{
+          setSomethingWrongSavedMovies(true);
           console.log(err);
         });
 
     const initialKeywordsMovies = localStorage.getItem('keywords');
     initialKeywordsMovies && setKeywordsMovies(initialKeywordsMovies);
-    
-    // const initialKeywordsSavedMovies = localStorage.getItem('keywordsSavedMovies');
-    // console.log('initialKeywordsSavedMovies', initialKeywordsSavedMovies);
-    // initialKeywordsSavedMovies && setKeywordsSavedMovies(initialKeywordsSavedMovies);
          
     const initialMoviesData = localStorage.getItem('initialMovies');
     if (initialMoviesData) {
@@ -100,26 +108,15 @@ function App() {
     const initialShortMoviesData = localStorage.getItem('shortMovie');
     initialShortMoviesData && setShortMovieSuitable(JSON.parse(initialShortMoviesData));
     
-    const initialSavedMoviesData = localStorage.getItem('initialSavedMovies');
-    console.log('initialSavedMoviesData', initialSavedMoviesData);
-    if (initialSavedMoviesData) {
-      setSavedMoviesByKeywords(JSON.parse(initialSavedMoviesData));
-      setSavedMovieFound(true);
-    }
-    
-    // const initialShortSavedMoviesData = localStorage.getItem('shortSavedMovie');
-    // initialShortSavedMoviesData && setShortSavedMovieSuitable(JSON.parse(initialShortSavedMoviesData));
-    
   },[loggedIn]);
 
   useEffect(() => {
-    console.log('currentSavedMovies', currentSavedMovies);
-   if (isMovieFound) {
+    if (isMovieFound) {
       setMovies(markSavedMovies(movies, currentSavedMovies));
     }
-    if (isSavedMovieFound) {
-      setSavedMoviesByKeywords(filterMoviesArray(isShortSavedMovieSuitable, currentSavedMovies, keywordsSavedMovies));
-    }
+    // if (isSavedMovieFound) {
+      setSavedMovies(filterMoviesArray(isShortSavedMovieSuitable, currentSavedMovies, keywordsSavedMovies));
+    // }
   }, [currentSavedMovies]);
   
   function formMoviesData(MoviesArr){
@@ -146,6 +143,7 @@ function App() {
     localStorage.setItem('shortMovie', shortData);
     setKeywordsMovies(keywordsData);
     setShortMovieSuitable(shortData);
+    setMovieFound(true);
     setLoading(true);
     setMoviesDataEmpty(false);
     const suitableMovies = filterMoviesArray(shortData, allMovies, keywordsData, currentSavedMovies);
@@ -157,24 +155,6 @@ function App() {
     }
     setSomethingWrongMovies(false);
     setLoading(false);
-    // moviesApi.getMovies()
-    // .then(moviesData=>{
-    //   setSomethingWrongMovies(false);
-    //   setLoading(false);
-    //   setMovieFound(true);
-    //   const suitableMovies = filterMoviesArray(shortData, formMoviesData(moviesData), keywordsData, currentSavedMovies)
-    //   if (suitableMovies.length === 0){
-    //     setMoviesDataEmpty(true);
-    //   } else {
-    //     setMovies(suitableMovies);
-    //     localStorage.setItem('initialMovies', JSON.stringify(suitableMovies));
-    //   }
-    // })
-    // .catch((err)=>{
-    //   setLoading(false);
-    //   setSomethingWrongMovies(true);
-    //   console.log(err);
-    // });
   }
   function handleRegister(name, email, password) {
     mainApi.register(name, email, password)
@@ -225,27 +205,21 @@ function App() {
   function handleProfileSignOut(){
     localStorage.removeItem('token');
     localStorage.removeItem('keywords');
-    // localStorage.removeItem('keywordsSavedMovies');
     localStorage.removeItem('initialMovies');
-    localStorage.removeItem('initialSavedMovies');
     localStorage.removeItem('shortMovie');
-    // localStorage.removeItem('shortSavedMovie');
     history.push('/');
     setLoggedIn(false);
     setMovieFound(false);
     setSavedMovieFound(false);
     setKeywordsMovies('');
     setMovies([]);
-    setSavedMoviesByKeywords([])
-    // setKeywordsSavedMovies('');
+    setSavedMovies([])
     setCurrentSavedMovies([]);
-    // setShortSavedMovieSuitable(false);
     setShortMovieSuitable(false);
   }
   function handleButtonSaveMovie(data) {
     mainApi.postSavedMovie(data)
         .then((data)=>{
-          console.log('data', data);
           setCurrentSavedMovies([data.movie, ...currentSavedMovies]);
         })
         .catch((err)=>{
@@ -253,7 +227,6 @@ function App() {
         });
   }
   function handleButtonDeleteMovie(movieId) {
-    console.log('delete', movieId);
     mainApi.deleteMovie(movieId)
         .then((data)=>{
           setCurrentSavedMovies(currentSavedMovies.filter(item => item.movieId !== data.movieId));
@@ -264,37 +237,21 @@ function App() {
   }
 
   function getSavedMoviesData(keywordsData, shortData){
-    console.log('keywordsData', keywordsData, 'shortData', shortData);
-    setSavedMoviesByKeywords([]);
-    // localStorage.setItem('keywordsSavedMovies', keywordsData);
-    // localStorage.setItem('shortSavedMovie', shortData);
+    setSavedMovies([]);
     setLoading(true);
     setSavedMoviesDataEmpty(false);
-    setSavedMovieFound(false);
-    // setKeywordsSavedMovies(keywordsData);
-    // setShortSavedMovieSuitable(shortData);
-    mainApi.getSavedMovies()
-    .then(moviesData=>{
-      console.log('moviesData', moviesData);
-      setLoading(false);
-      setSavedMovieFound(true);
-      setSomethingWrongSavedMovies(false);
-      const suitableMovies = filterMoviesArray(shortData, moviesData.movies, keywordsData);
-      console.log('suitableMovies', suitableMovies);
-      if (suitableMovies.length === 0){
-        setSavedMoviesDataEmpty(true);
-      } else {
-        setSavedMoviesByKeywords(suitableMovies);
-        localStorage.setItem('initialSavedMovies', JSON.stringify(moviesData.movies));
-      }
-      
-    })
-    .catch((err)=>{
-      setLoading(false);
-      setSavedMovieFound(false);
-      setSomethingWrongSavedMovies(true);
-      console.log(err);
-    });
+    setSavedMovieFound(true);
+    setKeywordsSavedMovies(keywordsData);
+    setShortSavedMovieSuitable(shortData);
+
+    const suitableMovies = filterMoviesArray(shortData, currentSavedMovies, keywordsData);
+    if (suitableMovies.length === 0){
+      setSavedMoviesDataEmpty(true);
+    } else {
+      setSavedMovies(suitableMovies);
+    }
+    setSomethingWrongMovies(false);
+    setLoading(false);
   }
 
   function clearErrorMessages(){
@@ -344,8 +301,9 @@ function App() {
             />
             <ProtectedRoute 
               path="/saved-movies"
-              loggedIn={loggedIn} 
-              movies={savedMoviesByKeywords}
+              loggedIn={loggedIn}
+              initMovies={currentSavedMovies}
+              movies={savedMovies}
               onButtonSearchClick={getSavedMoviesData}
               loading={loading}
               isDataFound={isSavedMovieFound}

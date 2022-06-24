@@ -13,7 +13,7 @@ function SavedMovies({movies, isOpenSavedMovies, onButtonSearchClick, loading, i
         <div className='saved-movies'>
             <div className='saved-movies__top'>
                 <Header isActive={true}/>
-                <SearchForm onClick={onButtonSearchClick}/>
+                <SearchForm onClick={onButtonSearchClick} isShort={true}/>
                 {isSomethingWrong && <ServerError />}
                 {loading && <Preloader />}
                 {isDataFound && 
