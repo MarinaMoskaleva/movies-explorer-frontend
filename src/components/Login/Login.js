@@ -1,60 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import './Login.css'
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
-import { loginErrors } from '../../utils/errorMessage';
-import {EMAIL_REGEX} from '../../utils/constants';
+import validator from 'validator';
+import { useFormWithValidation } from '../../customHooks/validation';
 
-function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+function Login({handleLogin, error}) {
+    const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
     
-    const [emailError, setEmailError] = useState('Поле Email не должно быть пустым.');
-    const [passError, setPassError] = useState('Поле Пароль не должно быть пустым.');
-    const [emailDirty, setEmailDirty] = useState(false);
-    const [passDirty, setPassDirty] = useState(false);
-    const [formValid, setFormValid] = useState(false);
-
-    function handleEmailChange(e){
-        setEmail(e.target.value);
-        if (!String(e.target.value).toLowerCase().match(EMAIL_REGEX)){
-            setEmailError('Некорректный email');
-        } else {
-            setEmailError('');
-        }
-    }
-    function handlePasswordChange(e){
-        setPassword(e.target.value);
-        if (e.target.value.length < 2){
-            setPassError('Обязательная длина поля от 2 символов.');
-        } else {
-            setPassError('');
-        }
-    }
+    useEffect(() => {
+        resetForm({}, {}, false);
+    }, [resetForm]);
+    
     function handleSubmit(e){
         e.preventDefault();
-    }
-    function blurHandler(e) {
-        switch (e.target.name){
-            case 'email':
-                setEmailDirty(true);
-                break;
-            case 'pass':
-                setPassDirty(true);
-                break;
-            default:
-                break;
+        if (!values.email || !values.pass){
+            return;
         }
+        handleLogin(values.email, values.pass);
     }
-    useEffect(()=>{
-        if (emailError || passError){
-            setFormValid(false);
-        } else {
-            setFormValid(true);
-        }
-    }, [emailError, passError]);
-
+    
     return (
         <section className="login">
             <div className="login__container">
@@ -69,11 +34,12 @@ function Login() {
                             name="email"
                             required
                             placeholder="Email"
-                            value={email}
-                            onChange={handleEmailChange}
-                            onBlur={blurHandler}
+                            value={values.email || ''}
+                            onChange={handleChange}
                         />
-                        <span className={`login__error-validation ${(emailDirty && emailError) && 'login__error-validation_show'}`}>{emailError}</span>
+                        <span className='login__error-validation login__error-validation_show'>
+                            { values.email ? (validator.isEmail(values.email) ? '' : 'Некорректный email') : '' || errors.email}
+                        </span>
                     </label>
                     <label className="login__form-field">Password
                         <input
@@ -84,19 +50,20 @@ function Login() {
                             required
                             placeholder="Пароль"
                             minLength="2"
-                            value={password}
-                            onChange={handlePasswordChange}
-                            onBlur={blurHandler}
+                            value={values.pass || ''}
+                            onChange={handleChange}
                         />
-                        <span className={`login__error-validation ${(passDirty && passError) && 'login__error-validation_show'}`}>{passError}</span>
+                        <span className='login__error-validation login__error-validation_show'>{errors.pass || ''}</span>
                     </label>
-                    <span className={`login__error ${error}`}>{loginErrors.wrongData}</span>
-                    <button 
-                        className={`login__button ${!formValid && 'login__button_disabled'}`} 
-                        onClick={handleSubmit} 
-                        type="submit" 
-                        disabled={!formValid}
-                    >Войти</button>
+                    <label className="login__submit">
+                        <span className='login__error login__error_show'>{error || ''}</span>
+                        <button 
+                            className={`login__button ${!isValid && 'login__button_disabled'}`} 
+                            onClick={handleSubmit} 
+                            type="submit" 
+                            disabled={!isValid}
+                        >Войти</button>
+                    </label>
                     <div className="login__caption">
                         <p className="login__caption-text">Ещё не зарегистрированы?</p>
                         <Link to="/signup" className="login__caption-link">Регистрация</Link>

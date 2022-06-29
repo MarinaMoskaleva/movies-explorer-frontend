@@ -1,0 +1,18 @@
+.even-more{
+    width: 100%;
+    max-width: 1140px;
+    background: #F9F9F9;
+    border-radius: 6px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #000000;
+    margin: 50px auto 80px;
+    height: 36px;
+    border: none;
+    padding: 0;
+}
+.even-more:hover{
+    opacity: 0.8;
+}

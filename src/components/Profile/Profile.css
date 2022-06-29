@@ -30,6 +30,8 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    position: relative;
+    padding-top: 33px;
 }
 .profile__greeting{
     margin-bottom: 123px;
@@ -129,7 +131,7 @@
     display: none;
 }
 .profile__button-save{
-    display: none;
+    display: block;
     background: #3456F3;
     border-radius: 3px;
     width: 100%;
@@ -145,26 +147,30 @@
 .profile__button-save:hover{
     opacity: 0.8;
 }
-.profile__button-save_active{
-    display: block;
-}
 .profile__button-save_error{
     background: #F8F8F8;
     color:#C2C2C2;
     pointer-events: none;
     user-select: none;
 }
-.profile__error{
+.profile__info{
     visibility: hidden;
     font-style: normal;
     font-weight: 400;
     font-size: 11px;
     line-height: 13px;
-    color: #FF004C;
     margin-bottom: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
-.profile__error_show{
+.profile__info_error{
     visibility: visible;
+    color: #FF004C;
+}
+.profile__info_success{
+    visibility: visible;
+    color: #000;
 }
 @media screen and (max-width: 1279px){
     .profile__data {
